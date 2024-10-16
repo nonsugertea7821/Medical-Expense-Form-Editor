@@ -2,9 +2,9 @@ import { Box, Button, Typography } from '@mui/material';
 import ExcelJS from 'exceljs';
 import React, { useEffect } from 'react';
 import { IExcelData } from './assets/interface.tsx';
-import MedicalExpenseForm from './assets/MedicalExpenseForm';
-import XlsxFileEditor from './assets/xlsxFileEditor';
-import XlsxFileReader from './assets/xlsxFileReader';
+import MedicalExpenseForm from './assets/MedicalExpenseForm.tsx';
+import XlsxFileEditor from './assets/xlsxFileEditor.tsx';
+import XlsxFileReader from './assets/xlsxFileReader.tsx';
 import ErrorBoundary from './ErrorBoundary.tsx';
 import Explain from './Explain.tsx';
 
