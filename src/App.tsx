@@ -12,7 +12,7 @@ const App: React.FC = () => {
 
   const [data, setData] = React.useState<IExcelData[]>(() => {
     const savedData = localStorage.getItem('medicalExpenseData');
-    console.log("retrieving data from cookie", savedData);
+    console.log("retrieving data from cache", savedData);
     return savedData ? JSON.parse(savedData) as IExcelData[] : [];
   });
   const [file, setFile] = React.useState<ExcelJS.Workbook>(new ExcelJS.Workbook());
