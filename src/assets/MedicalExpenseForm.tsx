@@ -26,9 +26,11 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
     const [error, setError] = useState<string | null>(null);
     const [previousEntry, setPreviousEntry] = useState<IExcelData | null>(null);
 
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
     const [uniqueCandidateOfName, setUniqueCandidateOfName] = useState<string[]>([]);
     const [uniqueCandidateOfInstitution, setUniqueCandidateOfInstitution] = useState<string[]>([]);
-    
+
     const validation = new Validation(formData);
 
     useEffect(() => {
@@ -48,6 +50,22 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
         setUniqueCandidateOfName([...new Set(formData.map((entry) => entry.name))]);
         setUniqueCandidateOfInstitution([...new Set(formData.map((entry) => entry.institution))]);
     }, [formData]);
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: { returnValue: string; }) => {
+            if (!isSubmitted) {
+                const message = '変更が保存されていません。ページを離れますか？';
+                event.returnValue = message;
+                return message;
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        }
+    }, [isSubmitted])
 
     const handleChange = (field: keyof IExcelData, value: string | number | boolean | Date | undefined) => {
         setCurrentEntry({ ...currentEntry, [field]: value });
@@ -72,30 +90,37 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
     };
 
     const handleSubmit = () => {
-        deliverData(formData);
+        if (formData != initialData) {
+            deliverData(formData);
+            alert("データをキャッシュに保存しました。");
+            setIsSubmitted(true);
+        }
+        else {
+            alert("エントリが変更・追加されていません");
+        }
     };
 
     const addNewEntry = () => {
         if (validation.isDuplicate(currentEntry)) {
             setError('同一内容の受診データが既に存在します。');
             if (window.confirm('同一内容の受診データが既に存在します。追加しますか？')) {
-            setError(null);
+                setError(null);
             } else {
-            return;
+                return;
             }
         }
 
-        if(validation.isOutOfRangeDate(currentEntry, 2023)){
+        if (validation.isOutOfRangeDate(currentEntry, 2023)) {
             setError('支払年月日が範囲外です。');
             return;
         }
 
-        if(validation.NameCharacterLimitExceeded(currentEntry)){
+        if (validation.NameCharacterLimitExceeded(currentEntry)) {
             setError('名前が10文字を超えています。');
             return;
         }
 
-        if(validation.InstitutionCharacterLimitExceeded(currentEntry)){
+        if (validation.InstitutionCharacterLimitExceeded(currentEntry)) {
             setError('医療施設名が20文字を超えています。');
             return;
         }
@@ -111,12 +136,12 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
         if (formData.length > 0) {
             const newFormData = [...formData];
             const lastEntry = newFormData.pop();
-            
+
             // paymentDateがDateオブジェクトであることを確認
             if (lastEntry && typeof lastEntry.paymentDate === 'string') {
                 lastEntry.paymentDate = new Date(lastEntry.paymentDate);
             }
-    
+
             setFormData(newFormData);
             setCurrentEntry(lastEntry || { ...initialEntry });
             setPreviousEntry(newFormData.length > 0 ? newFormData[newFormData.length - 1] : null);
@@ -167,10 +192,10 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
                             <TableRow>
                                 <TableCell>支払年月日</TableCell>
                                 <TableCell>
-                                    {previousEntry.paymentDate 
-                                        ? (previousEntry.paymentDate instanceof Date 
-                                            ? previousEntry.paymentDate.toISOString().split('T')[0] 
-                                            : new Date(previousEntry.paymentDate).toISOString().split('T')[0]) 
+                                    {previousEntry.paymentDate
+                                        ? (previousEntry.paymentDate instanceof Date
+                                            ? previousEntry.paymentDate.toISOString().split('T')[0]
+                                            : new Date(previousEntry.paymentDate).toISOString().split('T')[0])
                                         : 'N/A'}
                                 </TableCell>
                             </TableRow>
