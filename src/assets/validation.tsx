@@ -11,6 +11,7 @@ class Validation{
         return this._formData.some((entry) => 
             entry.name === newEntry.name &&
             entry.institution === newEntry.institution &&
+            entry.medicalExpense === newEntry.medicalExpense &&
             entry.paymentDate && newEntry.paymentDate &&
             entry.paymentDate.toISOString().split('T')[0] === newEntry.paymentDate.toISOString().split('T')[0]
         );
