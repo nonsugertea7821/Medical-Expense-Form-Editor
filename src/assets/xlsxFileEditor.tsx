@@ -26,8 +26,8 @@ const XlsxFileEditor = async (data: IExcelData[], file: ExcelJS.Workbook, sheetN
         row.getCell(8).value = item.medicalExpense ?? 0;
         row.getCell(9).value = item.reimbursedAmount ?? 0;
         row.getCell(10).value =
-            item.paymentDate && item.paymentDate instanceof Date ? 
-            `${item.paymentDate.getFullYear()}/${String(item.paymentDate.getMonth() + 1).padStart(2, '0')}/${String(item.paymentDate.getDate()).padStart(2, '0')}` : '';
+            item.paymentDate && !isNaN(Date.parse(item.paymentDate as unknown as string)) ? 
+            new Date(item.paymentDate).toISOString().split('T')[0].replace(/-/g, '/') : '';
         row.commit();
     });
 
