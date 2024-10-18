@@ -25,6 +25,9 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
     const [currentEntry, setCurrentEntry] = useState<IExcelData>({ ...initialEntry });
     const [error, setError] = useState<string | null>(null);
     const [previousEntry, setPreviousEntry] = useState<IExcelData | null>(null);
+
+    const [uniqueCandidateOfName, setUniqueCandidateOfName] = useState<string[]>([]);
+    const [uniqueCandidateOfInstitution, setUniqueCandidateOfInstitution] = useState<string[]>([]);
     
     const validation = new Validation(formData);
 
@@ -40,6 +43,11 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
             setPreviousEntry(null);
         }
     }, [initialData]);
+
+    useEffect(() => {
+        setUniqueCandidateOfName([...new Set(formData.map((entry) => entry.name))]);
+        setUniqueCandidateOfInstitution([...new Set(formData.map((entry) => entry.institution))]);
+    }, [formData]);
 
     const handleChange = (field: keyof IExcelData, value: string | number | boolean | Date | undefined) => {
         setCurrentEntry({ ...currentEntry, [field]: value });
@@ -178,7 +186,7 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
             <Box mb={2}>
                 <Autocomplete
                     freeSolo
-                    options={formData.map((option) => option.name)}
+                    options={uniqueCandidateOfName}
                     inputValue={currentEntry.name}
                     onInputChange={(_event, newInputValue) => {
                         try {
@@ -205,7 +213,7 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
                 />
                 <Autocomplete
                     freeSolo
-                    options={formData.map((option) => option.institution)}
+                    options={uniqueCandidateOfInstitution}
                     inputValue={currentEntry.institution}
                     onInputChange={(_event, newInputValue) => {
                         try {
