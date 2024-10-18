@@ -420,7 +420,7 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
                     color="secondary"
                     onClick={handleSubmit}
                 >
-                    入力を完了
+                    入力を終了
                 </Button>
             </Box>
         </Paper>
