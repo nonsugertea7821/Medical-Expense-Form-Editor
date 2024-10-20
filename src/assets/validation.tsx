@@ -30,7 +30,7 @@ class Validation{
     }
 
     public isInvalidNullAmount(newEntry:IExcelData):boolean{
-        return newEntry.medicalExpense === null;
+        return newEntry.medicalExpense === null || isNaN(newEntry.medicalExpense);
     }
 }
 
