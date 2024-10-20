@@ -29,8 +29,26 @@ class Validation{
         return newEntry.paymentDate ? (newEntry.paymentDate.getFullYear() < fiscalYear || newEntry.paymentDate.getFullYear() > fiscalYear + 1) : false;
     }
 
-    public isInvalidNullAmount(newEntry:IExcelData):boolean{
+    public isInvalidNameValue(newEntry:IExcelData):boolean{
+        return newEntry.name.length == 0;
+    }
+
+    public isInvalidInstitutionValue(newEntry:IExcelData):boolean{
+        return newEntry.institution.length == 0;
+    }
+
+    public isInvalidMedicalExpenseAmount(newEntry:IExcelData):boolean{
         return newEntry.medicalExpense === null || isNaN(newEntry.medicalExpense);
+    }
+
+    public isInvalidClassificationOfMedicalExpense(newEntry:IExcelData):boolean{
+        return(
+            newEntry.includes_CareService == false &&
+            newEntry.includes_Medication == false &&
+            newEntry.includes_Treatment == false &&
+            newEntry.includes_OtherMedicalExpenses == false
+        );
+        
     }
 }
 

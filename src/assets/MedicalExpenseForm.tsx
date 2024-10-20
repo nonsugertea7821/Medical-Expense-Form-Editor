@@ -115,6 +115,16 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
             return;
         }
 
+        if(validation.isInvalidNameValue(currentEntry)){
+            setError('氏名が未入力です。')
+            return;
+        }
+
+        if(validation.isInvalidInstitutionValue(currentEntry)){
+            setError('医療機関名が未入力です。')
+            return;
+        }
+
         if (validation.NameCharacterLimitExceeded(currentEntry)) {
             setError('名前が10文字を超えています。');
             return;
@@ -125,8 +135,13 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
             return;
         }
 
-        if(validation.isInvalidNullAmount(currentEntry)){
+        if(validation.isInvalidMedicalExpenseAmount(currentEntry)){
             setError('医療費の金額が入力されていません。');
+            return;
+        }
+
+        if(validation.isInvalidClassificationOfMedicalExpense(currentEntry)){
+            setError('医療費の区分が選択されていません。')
             return;
         }
 
