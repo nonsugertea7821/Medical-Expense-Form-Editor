@@ -148,19 +148,20 @@ const App: React.FC = () => {
             >
               JSONファイルを書き出し
               <input
-                type="button"
-                onClick={() => {
-                  const json = JSON.stringify(data, null, 2);
-                  const blob = new Blob([json], { type: 'application/json' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  const date = new Date().toISOString().split('T')[0];
-                  a.href = url;
-                    a.download = `MedicalExpenseFormData_${date}.json`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-                hidden
+              type="button"
+              onClick={() => {
+                const sortedData = [...data].sort((a, b) => a.id - b.id);
+                const json = JSON.stringify(sortedData, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const date = new Date().toISOString().split('T')[0];
+                a.href = url;
+                a.download = `MedicalExpenseFormData_${date}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              hidden
               />
             </Button>
           </Box>
