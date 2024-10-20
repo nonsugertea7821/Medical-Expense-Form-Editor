@@ -99,6 +99,72 @@ const App: React.FC = () => {
               ダウンロード
             </Button>
           </Box>
+          <p>中断データの書き出し・読み込みはこちら</p>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-center"
+            p={2}
+            bgcolor="background.paper"
+            boxShadow={1}
+            borderRadius={1}
+            sx={{ width: '100%', gap: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              component="label"
+            >
+              JSONファイルを読み込み
+              <input
+              type="file"
+              accept=".json"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                try {
+                  const text = await file.text();
+                  const jsonData = JSON.parse(text) as IExcelData[];
+                  if (data.length > 0) {
+                  if (!window.confirm('既にデータが入力されています。置き換えますか？')) {
+                    return;
+                  }
+                  }
+                  setData(jsonData);
+                  localStorage.setItem('medicalExpenseData', JSON.stringify(jsonData));
+                  alert('JSONファイルが正常に読み込まれました。');
+                } catch (error) {
+                  console.error('Error reading JSON file:', error);
+                  alert('JSONファイルの読み込み中にエラーが発生しました。');
+                }
+                }
+              }}
+              />
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              component="label"
+            >
+              JSONファイルを書き出し
+              <input
+                type="button"
+                onClick={() => {
+                  const json = JSON.stringify(data, null, 2);
+                  const blob = new Blob([json], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  const date = new Date().toISOString().split('T')[0];
+                  a.href = url;
+                    a.download = `MedicalExpenseFormData_${date}.json`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                hidden
+              />
+            </Button>
+          </Box>
+
           <p>初めからやりなおす</p>
           <Box
             display="flex"
@@ -113,17 +179,17 @@ const App: React.FC = () => {
               variant="contained"
               color="secondary"
               onClick={() => {
-              if (window.confirm('本当にすべての入力内容を削除しますか？')) {
-                localStorage.removeItem('medicalExpenseData');
-                localStorage.removeItem('hasSeenIntroduction');
-                setData([]);
-                setFile(new ExcelJS.Workbook());
-                setEditedFile(new ExcelJS.Workbook());
-                alert('すべての入力内容が削除されました。');
-              }
+                if (window.confirm('本当にすべての入力内容を削除しますか？')) {
+                  localStorage.removeItem('medicalExpenseData');
+                  localStorage.removeItem('hasSeenIntroduction');
+                  setData([]);
+                  setFile(new ExcelJS.Workbook());
+                  setEditedFile(new ExcelJS.Workbook());
+                  alert('すべての入力内容が削除されました。');
+                }
               }}
             >
-              クリア
+              オールクリア
             </Button>
           </Box>
         </div>
