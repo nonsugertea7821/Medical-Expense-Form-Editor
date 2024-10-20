@@ -113,12 +113,14 @@ const App: React.FC = () => {
               variant="contained"
               color="secondary"
               onClick={() => {
+              if (window.confirm('本当にすべての入力内容を削除しますか？')) {
                 localStorage.removeItem('medicalExpenseData');
                 localStorage.removeItem('hasSeenIntroduction');
                 setData([]);
                 setFile(new ExcelJS.Workbook());
                 setEditedFile(new ExcelJS.Workbook());
                 alert('すべての入力内容が削除されました。');
+              }
               }}
             >
               クリア
