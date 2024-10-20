@@ -125,6 +125,11 @@ const MedicalExpenseForm: React.FC<MEFormContainerProps> = ({ initialData, deliv
             return;
         }
 
+        if(validation.isInvalidNullAmount(currentEntry)){
+            setError('医療費の金額が入力されていません。');
+            return;
+        }
+
         setError(null);
         setPreviousEntry(currentEntry);
         setFormData([...formData, { ...currentEntry, id: formData.length + 1 }]);

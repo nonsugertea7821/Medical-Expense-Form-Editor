@@ -28,6 +28,10 @@ class Validation{
     public isOutOfRangeDate(newEntry:IExcelData, fiscalYear:number): boolean{
         return newEntry.paymentDate ? (newEntry.paymentDate.getFullYear() < fiscalYear || newEntry.paymentDate.getFullYear() > fiscalYear + 1) : false;
     }
+
+    public isInvalidNullAmount(newEntry:IExcelData):boolean{
+        return newEntry.medicalExpense === null;
+    }
 }
 
 export default Validation;
