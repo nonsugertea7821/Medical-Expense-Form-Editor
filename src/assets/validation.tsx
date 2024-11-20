@@ -12,7 +12,8 @@ class Validation{
             entry.name === newEntry.name &&
             entry.institution === newEntry.institution &&
             entry.medicalExpense === newEntry.medicalExpense &&
-            entry.paymentDate && newEntry.paymentDate &&
+            entry.paymentDate instanceof Date && 
+            newEntry.paymentDate instanceof Date &&
             entry.paymentDate.toISOString().split('T')[0] === newEntry.paymentDate.toISOString().split('T')[0]
         );
     }
