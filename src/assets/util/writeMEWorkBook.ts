@@ -1,9 +1,10 @@
 import ExcelJS from 'exceljs'; // Excelファイルを操作するためのライブラリをインポート
-import { IExcelData, SortMethod } from './interface.tsx';
-import { sortExcelData } from './sortExcelData.tsx';
+import { MedicalExpenseInfo } from '../data/MedicalExpenseInfo.ts';
+import sortExcelData, { SortMethod } from './sortExcelData.ts';
 
 // Excelファイルを編集する非同期関数
-const XlsxFileEditor = async (data: IExcelData[], file: ExcelJS.Workbook, sheetName: string) => {
+export default async function writeMEWorkBook(data: MedicalExpenseInfo[], file: ExcelJS.Workbook, sheetName: string): Promise<ExcelJS.Workbook> {
+
     const templateBuffer = await file.xlsx.writeBuffer();
     const workbook = file;
     await workbook.xlsx.load(templateBuffer);
@@ -33,5 +34,3 @@ const XlsxFileEditor = async (data: IExcelData[], file: ExcelJS.Workbook, sheetN
 
     return workbook;
 };
-
-export default XlsxFileEditor;

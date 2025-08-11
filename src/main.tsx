@@ -1,9 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Landing from './landing'
+import { RecoilRoot } from 'recoil'
+import App from './App'
+import IntroductionDialog from './assets/IntroductionDialog'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Landing />
-  </StrictMode>,
+    <RecoilRoot>
+      <IntroductionDialog />
+      <App/>
+    </RecoilRoot>
+  </StrictMode>
 )
