@@ -186,7 +186,7 @@ export default function useMEFormContainer(): MEFormContainer {
             }
         }
 
-        if (isOutOfRangeDate(currentEntry, 2023)) {
+        if (isOutOfRangeDate(currentEntry, 2025)) {
             setError('支払年月日が範囲外です。');
             return;
         }
